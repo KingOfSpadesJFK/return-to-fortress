@@ -1,0 +1,15 @@
+res://script/DebugHUD.cs
+res://script/Player.cs
+res://script/resource/ClientSettings.cs
+res://script/resource/FireType.cs
+res://script/resource/PlayerClass.cs
+res://script/resource/PlayerInfo.cs
+res://script/resource/Team.cs
+res://script/resource/Weapon.cs
+res://script/SpawnBox.cs
+res://node/gordon.tscn
+res://map/2fort.tscn
+res://resource/team/red.tres
+res://resource/team/blue.tres
+res://map/map.tscn
+res://node/game.tscn

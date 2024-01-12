@@ -1,0 +1,14 @@
+Node3D
+RichTextLabel
+ColorRect
+SubViewport
+SubViewportContainer
+CollisionShape3D
+CSGBox3D
+MeshInstance3D
+StaticBody3D
+DirectionalLight3D
+WorldEnvironment
+Camera3D
+CharacterBody3D
+Node

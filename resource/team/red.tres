@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Team" load_steps=2 format=3 uid="uid://bydgh78aqte3a"]
+
+[ext_resource type="Script" path="res://script/resource/Team.cs" id="1_fxrk7"]
+
+[resource]
+script = ExtResource("1_fxrk7")
+Name = "Red"
+Color = Color(1, 0.435294, 0.368627, 1)
+Score = 0
+MaxPlayers = 12

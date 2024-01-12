@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://dlqnqh3b5dass"]
+
+[ext_resource type="PackedScene" uid="uid://dr16mfpbis6gj" path="res://node/gordon.tscn" id="1_am6ao"]
+[ext_resource type="Texture2D" uid="uid://ckhr0xs7c84ya" path="res://assets/untitled.png" id="2_oun5x"]
+[ext_resource type="Script" path="res://script/SpawnBox.cs" id="3_hrs34"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_peyx1"]
+
+[sub_resource type="Sky" id="Sky_4ttse"]
+sky_material = SubResource("ProceduralSkyMaterial_peyx1")
+
+[sub_resource type="Environment" id="Environment_i5nua"]
+background_mode = 2
+sky = SubResource("Sky_4ttse")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hhelt"]
+albedo_texture = ExtResource("2_oun5x")
+uv1_scale = Vector3(100, 100, 100)
+
+[node name="Map" type="Node3D"]
+
+[node name="Actor" type="Node" parent="."]
+
+[node name="Gordon" parent="Actor" instance=ExtResource("1_am6ao")]
+MaxJumps = 2000
+
+[node name="World" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = SubResource("Environment_i5nua")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World"]
+transform = Transform3D(-0.239904, -0.806596, 0.540231, -0.547737, 0.57191, 0.610658, -0.801518, -0.149405, -0.579006, 0.861432, 2.5715, 0.0478897)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="World"]
+use_collision = true
+size = Vector3(100, 1, 100)
+material = SubResource("StandardMaterial3D_hhelt")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="World"]
+transform = Transform3D(2.94713, -1.60179, 0, 5.10458, 0.924792, 0, 0, 0, 1, -16.6288, -15.2071, -7)
+use_collision = true
+size = Vector3(7, 6, 7)
+
+[node name="Spawn" type="Node3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.448711, 0)
+script = ExtResource("3_hrs34")

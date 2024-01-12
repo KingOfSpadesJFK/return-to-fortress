@@ -1,0 +1,166 @@
+[gd_scene load_steps=8 format=3 uid="uid://byxq3ghcmw4ba"]
+
+[ext_resource type="PackedScene" uid="uid://dr16mfpbis6gj" path="res://node/gordon.tscn" id="1_h75wl"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_peyx1"]
+
+[sub_resource type="Sky" id="Sky_4ttse"]
+sky_material = SubResource("ProceduralSkyMaterial_peyx1")
+
+[sub_resource type="Environment" id="Environment_i5nua"]
+background_mode = 2
+sky = SubResource("Sky_4ttse")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dn1p1"]
+albedo_color = Color(0.513726, 0.352941, 0.235294, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5y1w"]
+albedo_color = Color(1, 0.443137, 0.458824, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hpkcy"]
+albedo_color = Color(0.521569, 0.662745, 0.807843, 1)
+
+[node name="Map" type="Node3D"]
+
+[node name="Actor" type="Node" parent="."]
+
+[node name="Gordon" parent="Actor" instance=ExtResource("1_h75wl")]
+
+[node name="Node3D" type="Node3D" parent="Actor"]
+
+[node name="World" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = SubResource("Environment_i5nua")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World"]
+transform = Transform3D(-0.239904, -0.806596, 0.540231, -0.547737, 0.57191, 0.610658, -0.801518, -0.149405, -0.579006, 0.861432, 2.5715, 0.0478897)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, -0.5)
+use_collision = true
+size = Vector3(8, 1, 20)
+material = SubResource("StandardMaterial3D_dn1p1")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -5.5, 14.5)
+use_collision = true
+size = Vector3(32, 12, 10)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 2.5, 25.5)
+use_collision = true
+size = Vector3(32, 28, 12)
+material = SubResource("StandardMaterial3D_t5y1w")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="World/CSGBox3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.5, -1.5)
+operation = 2
+size = Vector3(4, 5, 9)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="World/CSGBox3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.5, 2)
+operation = 2
+size = Vector3(23, 5, 6)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="World/CSGBox3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.5, -1.5)
+operation = 2
+size = Vector3(4, 5, 9)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="World"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.5, -5.5, -15.5)
+use_collision = true
+size = Vector3(32, 12, 10)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="World"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.5, 2.5, -26.5)
+use_collision = true
+size = Vector3(32, 28, 12)
+material = SubResource("StandardMaterial3D_hpkcy")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="World/CSGBox3D5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.5, -1.5)
+operation = 2
+size = Vector3(4, 5, 9)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="World/CSGBox3D5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.5, 2)
+operation = 2
+size = Vector3(23, 5, 6)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="World/CSGBox3D5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.5, -1.5)
+operation = 2
+size = Vector3(4, 5, 9)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.5, -0.5)
+use_collision = true
+flip_faces = true
+size = Vector3(32, 22, 64)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="World/CSGBox3D6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 11, -1.5)
+operation = 2
+size = Vector3(56, 3, 44)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, -10.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D17" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, -11.5, -7.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, -9.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, -8.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, -7.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -6.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, -5.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -4.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -3.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D16" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -2.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+
+[node name="CSGBox3D18" type="CSGBox3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, -1.5, -9.5)
+use_collision = true
+size = Vector3(3, 2, 2)
