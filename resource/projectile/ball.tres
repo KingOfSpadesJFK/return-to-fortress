@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ProjectileInfo" load_steps=6 format=3 uid="uid://cygd8auxreotw"]
+
+[ext_resource type="Script" path="res://script/resource/ImpactDamage.cs" id="1_k5js1"]
+[ext_resource type="Script" path="res://script/resource/ProjectileInfo.cs" id="2_jkc34"]
+
+[sub_resource type="Resource" id="Resource_kvb1g"]
+script = ExtResource("1_k5js1")
+Damage = 10
+
+[sub_resource type="BoxMesh" id="BoxMesh_0513y"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_tg002"]
+
+[resource]
+script = ExtResource("2_jkc34")
+ProjectileMesh = SubResource("SphereMesh_tg002")
+ParticleMesh = Array[Mesh]([SubResource("BoxMesh_0513y")])
+Impaction = SubResource("Resource_kvb1g")

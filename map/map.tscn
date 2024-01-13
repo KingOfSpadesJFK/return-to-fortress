@@ -22,6 +22,7 @@ uv1_scale = Vector3(100, 100, 100)
 [node name="Actor" type="Node" parent="."]
 
 [node name="Gordon" parent="Actor" instance=ExtResource("1_am6ao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.731009, 0)
 MaxJumps = 2000
 
 [node name="World" type="Node" parent="."]

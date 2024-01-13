@@ -25,6 +25,7 @@ albedo_color = Color(0.521569, 0.662745, 0.807843, 1)
 [node name="Actor" type="Node" parent="."]
 
 [node name="Gordon" parent="Actor" instance=ExtResource("1_h75wl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10618, 0)
 
 [node name="Node3D" type="Node3D" parent="Actor"]
 

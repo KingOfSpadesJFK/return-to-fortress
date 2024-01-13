@@ -1,25 +1,61 @@
-[gd_scene load_steps=4 format=3 uid="uid://dr16mfpbis6gj"]
+[gd_scene load_steps=11 format=3 uid="uid://dr16mfpbis6gj"]
 
 [ext_resource type="Script" path="res://script/Player.cs" id="1_h1pj0"]
+[ext_resource type="Script" path="res://script/resource/PlayerClass.cs" id="2_16dls"]
+[ext_resource type="Resource" uid="uid://bydgh78aqte3a" path="res://resource/team/red.tres" id="3_jss2s"]
+[ext_resource type="Script" path="res://script/resource/PlayerInfo.cs" id="4_au4kj"]
+[ext_resource type="Resource" uid="uid://nq45ntrbb7hu" path="res://resource/weapon/projectile/rocket_launcher.tres" id="4_y5ksf"]
+
+[sub_resource type="Resource" id="Resource_gg1ig"]
+script = ExtResource("2_16dls")
+Name = "Scout"
+MaxHealth = 120
+MaxArmor = 100
+Loadout = null
+
+[sub_resource type="Resource" id="Resource_lk2yi"]
+script = ExtResource("4_au4kj")
+ID = "0"
+Name = "Player"
+Class = SubResource("Resource_gg1ig")
+Health = 100
+Armor = 0
+Kills = 0
+Deaths = 0
+Assists = 0
+Score = 0
+Ping = 0
+Team = ExtResource("3_jss2s")
+Weapon = ExtResource("4_y5ksf")
+Position = Vector3(0, 0, 0)
+Rotation = Vector3(0, 0, 0)
+Velocity = Vector3(0, 0, 0)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_581ow"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_kypmr"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_lwdoh"]
 
 [node name="Gordon" type="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.611936, 0)
 script = ExtResource("1_h1pj0")
+Info = SubResource("Resource_lk2yi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CylinderShape3D_581ow")
 
 [node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72976, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+[node name="Eye" type="Camera3D" parent="Head"]
 
-[node name="FirePoint" type="Node3D" parent="."]
+[node name="FirePoint" type="Node3D" parent="Head/Eye"]
+transform = Transform3D(0.999507, 0.00191758, 0.0313522, 0, 0.998135, -0.0610485, -0.0314108, 0.0610184, 0.997642, 0.3538, -0.136108, -0.77112)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Eye/FirePoint"]
+transform = Transform3D(0.453943, 0, 0, 0, -4.37114e-08, 0.0772696, 0, -1, -3.37756e-09, 0, 0, 0)
+mesh = SubResource("PrismMesh_kypmr")
 
 [node name="AimPoint" type="Node3D" parent="."]
 

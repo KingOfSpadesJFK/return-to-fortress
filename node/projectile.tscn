@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1q8k41vk5ye8"]
+
+[ext_resource type="Script" path="res://script/Projectile.cs" id="1_gr73g"]
+
+[node name="Projectile" type="Node3D"]
+script = ExtResource("1_gr73g")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -1)

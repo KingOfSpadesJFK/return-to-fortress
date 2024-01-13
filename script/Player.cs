@@ -16,9 +16,12 @@ public partial class Player : CharacterBody3D
 	public float Sensitivity = 0.750f;
 
 	private const float SENSITIVITY_CONSTANT = 0.0075f;
+	private Projectile _projectileInstance;
 
 	private Node3D _head;
-	private Camera3D _camera;
+	private Camera3D _eye;
+	private Node3D _firePoint;
+
 	private int _jumps = 0;
 	private Vector3 _velocity;
 	private Vector2 _velocityXZ {
@@ -41,7 +44,8 @@ public partial class Player : CharacterBody3D
 	public override void _Ready()
 	{
 		_head = GetNode<Node3D>("Head");
-		_camera = GetNode<Camera3D>("Head/Camera3D");
+		_eye = GetNode<Camera3D>("Head/Eye");
+		_firePoint = GetNode<Node3D>("Head/Eye/FirePoint");
 
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
@@ -51,11 +55,11 @@ public partial class Player : CharacterBody3D
 		// Mouse movement
 		if (@event is InputEventMouseMotion mouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured) {
 			_head.RotateY(-mouseMotion.Relative.X * Sensitivity * SENSITIVITY_CONSTANT);
-			_camera.RotateX(-mouseMotion.Relative.Y * Sensitivity * SENSITIVITY_CONSTANT);
-			_camera.RotationDegrees = new Vector3(
-				Mathf.Clamp(_camera.RotationDegrees.X, -90, 90),
-				_camera.RotationDegrees.Y,
-				_camera.RotationDegrees.Z
+			_eye.RotateX(-mouseMotion.Relative.Y * Sensitivity * SENSITIVITY_CONSTANT);
+			_eye.RotationDegrees = new Vector3(
+				Mathf.Clamp(_eye.RotationDegrees.X, -90, 90),
+				_eye.RotationDegrees.Y,
+				_eye.RotationDegrees.Z
 			);
 		}
 	}
@@ -65,6 +69,15 @@ public partial class Player : CharacterBody3D
 		_velocity = Velocity;
 		Vector2 inputDir = Input.GetVector("player_movement_left", "player_movement_right", "player_movement_up", "player_movement_down");
 		_wishDir = (_head.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+
+		if (Input.IsActionJustPressed("player_fire")) {
+			// _projectileInstance = projectile.Instantiate<Projectile>();
+			// _projectileInstance.Position = _head.GlobalPosition;
+			// _projectileInstance.Transform = _head.Transform;
+			if (Info.Weapon is Weapon weapon) {
+				weapon.Fire(GetParent(), _firePoint.GlobalTransform.Basis, _firePoint.GlobalPosition);
+			}
+		}
 
 		// Add a force to the player in the direction they are looking
 		//  This is for debugging purposes only
@@ -76,6 +89,9 @@ public partial class Player : CharacterBody3D
 		// Handle mid air and ground
 		if (!IsOnFloor()) {
 			HandleMidAir(delta);
+			if (_jumps == 0) {
+				_jumps++;
+			}
 		} else {
 			HandleGround(delta);
 			_jumps = 0;
