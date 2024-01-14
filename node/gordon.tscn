@@ -56,11 +56,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72976, 0)
 transform = Transform3D(0.999507, 0.00191758, 0.0313522, 0, 0.998135, -0.0610485, -0.0314108, 0.0610184, 0.997642, 0.3538, -0.136108, -0.77112)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Eye/FirePoint"]
-transform = Transform3D(0.453943, 0, 0, 0, -4.37114e-08, 0.0772696, 0, -1, -3.37756e-09, 0, 0, 0)
+transform = Transform3D(0.453728, 0.0284647, 0.000907058, -0.005509, 0.0138142, 0.0772565, 0.0128456, -0.999498, 0.0010936, 0, 0, 0)
 mesh = SubResource("PrismMesh_kypmr")
 
 [node name="AimPoint" type="Node3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CylinderMesh_lwdoh")

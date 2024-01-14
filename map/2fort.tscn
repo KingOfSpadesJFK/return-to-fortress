@@ -1,6 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://byxq3ghcmw4ba"]
+[gd_scene load_steps=13 format=3 uid="uid://byxq3ghcmw4ba"]
 
 [ext_resource type="PackedScene" uid="uid://dr16mfpbis6gj" path="res://node/gordon.tscn" id="1_h75wl"]
+[ext_resource type="Script" path="res://script/Dummy.cs" id="2_siqmu"]
+[ext_resource type="Resource" uid="uid://nq45ntrbb7hu" path="res://resource/weapon/projectile/rocket_launcher.tres" id="3_hpwl6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kfyrm"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_a610w"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_ethfi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_peyx1"]
 
@@ -27,7 +35,27 @@ albedo_color = Color(0.521569, 0.662745, 0.807843, 1)
 [node name="Gordon" parent="Actor" instance=ExtResource("1_h75wl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10618, 0)
 
-[node name="Node3D" type="Node3D" parent="Actor"]
+[node name="Dummy" type="StaticBody3D" parent="Actor"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -9.42384, 1.83397, -29.0716)
+script = ExtResource("2_siqmu")
+Weapon = ExtResource("3_hpwl6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Actor/Dummy"]
+shape = SubResource("CapsuleShape3D_kfyrm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Actor/Dummy"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_a610w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Actor/Dummy/MeshInstance3D"]
+transform = Transform3D(0.733325, 0, 0, 0, -1.04888e-07, -0.209408, 0, 2.39956, -9.15351e-09, 0, 0, 1)
+mesh = SubResource("PrismMesh_ethfi")
+
+[node name="FirePoint" type="Node3D" parent="Actor/Dummy/MeshInstance3D"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 9.53674e-06, 0, 2.67924)
+
+[node name="Timer" type="Timer" parent="Actor/Dummy"]
+autostart = true
 
 [node name="World" type="Node" parent="."]
 
@@ -165,3 +193,5 @@ size = Vector3(3, 2, 2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, -1.5, -9.5)
 use_collision = true
 size = Vector3(3, 2, 2)
+
+[connection signal="timeout" from="Actor/Dummy/Timer" to="Actor/Dummy" method="_on_timer_timeout"]

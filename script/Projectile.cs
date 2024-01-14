@@ -87,9 +87,9 @@ public partial class Projectile : Node3D
 	//  This function will only be called when the timeout timer is set.
 	//  Will QueueFree() the projectile no matter what.
 	private void OnTimeout() {
-		if (Info.TimeoutImpaction is ImpactResource) {
+		if (Info.TimeoutImpaction is ImpactInfo) {
 			ReturnToFortress.LogInfo("Projectile timeout at ", Position);
-			Info.TimeoutImpaction.Impact();
+			Info.TimeoutImpaction.Impact(null);
 		}
 		Destroy();
 	}
@@ -113,8 +113,8 @@ public partial class Projectile : Node3D
 	{
 		if (!_isDead) {
 			Position += Transform.Basis * new Vector3(0.0f, 0.0f, -Speed) * (float)delta;
-			if (_rayCast.IsColliding() && Info.Impaction is ImpactResource) {
-				Info.Impaction.Impact();
+			if (_rayCast.IsColliding() && Info.Impaction is ImpactInfo) {
+				Info.Impaction.Impact(_rayCast.GetCollider());
 				Destroy();
 			}
 		}

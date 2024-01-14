@@ -10,12 +10,12 @@ public partial class ProjectileInfo : Resource
     [Export] public Skin ParticleSkin;
     [Export] public float ParticleLifetime = 1.0f;
     [Export] public ParticleProcessMaterial ParticleMaterial;
-    [Export] public ImpactResource Impaction;
-    [Export] public ImpactResource TimeoutImpaction;
+    [Export] public ImpactInfo Impaction;
+    [Export] public ImpactInfo TimeoutImpaction;
     [Export] public float TimeoutTimer = 10.0f;
     public PackedScene Node;
 
-    public ProjectileInfo(Mesh projM, Skin projS, Mesh[] partM, Skin partS, ParticleProcessMaterial partMat, ImpactResource impact, ImpactResource timeImpact)
+    public ProjectileInfo(Mesh projM, Skin projS, Mesh[] partM, Skin partS, ParticleProcessMaterial partMat, ImpactInfo impact, ImpactInfo timeImpact)
     {
         ProjectileMesh = projM;
         ProjectileSkin = projS;

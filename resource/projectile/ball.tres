@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="ProjectileInfo" load_steps=7 format=3 uid="uid://cygd8auxreotw"]
 
-[ext_resource type="Script" path="res://script/resource/ImpactResource.cs" id="1_hsvup"]
+[ext_resource type="Script" path="res://script/resource/ImpactInfo.cs" id="1_k2ks1"]
 [ext_resource type="Script" path="res://script/resource/ProjectileInfo.cs" id="2_jkc34"]
 
-[sub_resource type="Resource" id="Resource_p7oya"]
-script = ExtResource("1_hsvup")
+[sub_resource type="Resource" id="Resource_3o214"]
+script = ExtResource("1_k2ks1")
 Damage = 10
 Knockback = 0.0
 
@@ -25,7 +25,7 @@ size = Vector3(0.1, 0.1, 0.1)
 script = ExtResource("2_jkc34")
 ProjectileMesh = SubResource("SphereMesh_tg002")
 ParticleMesh = Array[Mesh]([SubResource("BoxMesh_0513y")])
-ParticleMaterial = SubResource("ParticleProcessMaterial_jbwuv")
-Impaction = SubResource("Resource_p7oya")
-TimeoutTimer = 10.0
 ParticleLifetime = 1.0
+ParticleMaterial = SubResource("ParticleProcessMaterial_jbwuv")
+Impaction = SubResource("Resource_3o214")
+TimeoutTimer = 10.0

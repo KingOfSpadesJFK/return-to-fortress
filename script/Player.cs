@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public partial class Player : CharacterBody3D
+public partial class Player : CharacterBody3D, IDamagable
 {
 	[Export] public PlayerInfo Info;
 	[Export] public float WalkingAcceleration = 7.50f;
@@ -14,6 +14,10 @@ public partial class Player : CharacterBody3D
 	[Export] public float Gravity = 20.0f;				// The player gravity should be independent of the map gravity.
 	[Export] public int MaxJumps = 1;
 	public float Sensitivity = 0.750f;
+
+	[Signal] public delegate void PlayerDamageEventHandler();
+	[Signal] public delegate void PlayerDeathEventHandler();
+	[Signal] public delegate void PlayerFireEventHandler();
 
 	private const float SENSITIVITY_CONSTANT = 0.0075f;
 	private Projectile _projectileInstance;
@@ -48,6 +52,12 @@ public partial class Player : CharacterBody3D
 		_firePoint = GetNode<Node3D>("Head/Eye/FirePoint");
 
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+	}
+
+	public void Damage(int damage, Vector3 knockback) {
+		Info.Health -= damage;
+		_velocity += knockback;
+		ReturnToFortress.LogInfo("Player health: ", Info.Health);
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
