@@ -40,8 +40,7 @@ Velocity = Vector3(0, 0, 0)
 [node name="Gordon" type="CharacterBody3D"]
 script = ExtResource("1_h1pj0")
 Info = SubResource("Resource_lk2yi")
-WalkingAcceleration = 8.25
-WalkingDeceleration = 7.0
+WalkingAirAcceleration = 20.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

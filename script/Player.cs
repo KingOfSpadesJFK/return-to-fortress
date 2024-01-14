@@ -4,10 +4,10 @@ using Godot;
 public partial class Player : CharacterBody3D, IDamagable
 {
 	[Export] public PlayerInfo Info;
-	[Export] public float WalkingAcceleration = 7.50f;
-	[Export] public float WalkingSpeedCap = 10.0f;
-	[Export] public float WalkingDeceleration = 6.750f;
-	[Export] public float WalkingAirAcceleration = 3.0f;
+	[Export] public float WalkingAcceleration = 35.0f;
+	[Export] public float WalkingSpeedCap = 5.0f;
+	[Export] public float WalkingDeceleration = 7.0f;
+	[Export] public float WalkingAirAcceleration = 20.0f;
 	[Export] public float AirResistance = 0.1250f;
 	[Export] public float JumpVelocity = 7.50f;
 	[Export] public float JumpForwardVelocity = 1.0f;
@@ -33,7 +33,7 @@ public partial class Player : CharacterBody3D, IDamagable
 		set => _velocity = new Vector3(value.X, _velocity.Y, value.Y);
 	}
 
-	private float 	_velocityY {
+	private float _velocityY {
 		get => _velocity.Y;
 		set => _velocity = new Vector3(_velocity.X, value, _velocity.Z);
 	}
@@ -118,7 +118,7 @@ public partial class Player : CharacterBody3D, IDamagable
 			HandleMovement(delta);
 		}
 
-		Velocity = new Vector3(_velocityXZ.X, _velocity.Y, _velocityXZ.Y);
+		Velocity = _velocity;
 		MoveAndSlide();
 	}
 
@@ -129,6 +129,7 @@ public partial class Player : CharacterBody3D, IDamagable
 
 	private void HandleGround(double delta) {
 		// Handle friction
+		_jumpDirection = Vector2.Zero;
 		_velocityXZ = _velocityXZ.Lerp(Vector2.Zero, WalkingDeceleration * (float)delta);
 	}
 
@@ -146,16 +147,18 @@ public partial class Player : CharacterBody3D, IDamagable
 
 	private void HandleMovement(double delta) {
 		// Handle acceleration
-		//  Only if the player is moving slower than the speed cap
-		if (_velocityXZ.Length() < WalkingSpeedCap + JumpForwardVelocity) {
+		//  Only if the player is moving slower than the speed cap or holding any direction
+		//  other than forward.
+		if (_velocityXZ.Length() < WalkingSpeedCap + JumpForwardVelocity || 
+				_velocityXZ.Normalized().Dot(_wishDirXZ) <= 0.75f) {
 			// jumpDirDot is the dot product of the velocity direction and the wish direction
 			//  It lets the player move backwards in the air after jumping in a direction
 			float jumpDirDot = !IsOnFloor() && _velocityXZ != Vector2.Zero && _jumpDirection != Vector2.Zero ? 
-				Mathf.Clamp((-_velocityXZ.Dot(_wishDirXZ) + 1.0f) / 2.0f, 0.5f, 1.0f) : 0.5f;
+				Mathf.Clamp((-_velocityXZ.Normalized().Dot(_wishDirXZ) + 1.0f) / 2.0f, 0.5f, 1.0f) : 0.5f;
 			// Different accelearation rates in the air and on the ground
 			//  Mid air acceleration is affected by jumpDirDot^2
 			float acceleration = IsOnFloor() ? WalkingAcceleration : WalkingAirAcceleration * jumpDirDot * jumpDirDot;
-			_velocityXZ = _velocityXZ.Lerp(_wishDirXZ * WalkingSpeedCap, acceleration * (float)delta);
+			_velocityXZ += _wishDirXZ * acceleration * (float)delta;
 		}
 	}
 }
