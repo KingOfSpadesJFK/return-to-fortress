@@ -1,11 +1,20 @@
-[gd_resource type="Resource" script_class="ProjectileInfo" load_steps=6 format=3 uid="uid://cygd8auxreotw"]
+[gd_resource type="Resource" script_class="ProjectileInfo" load_steps=7 format=3 uid="uid://cygd8auxreotw"]
 
-[ext_resource type="Script" path="res://script/resource/ImpactDamage.cs" id="1_k5js1"]
+[ext_resource type="Script" path="res://script/resource/ImpactResource.cs" id="1_hsvup"]
 [ext_resource type="Script" path="res://script/resource/ProjectileInfo.cs" id="2_jkc34"]
 
-[sub_resource type="Resource" id="Resource_kvb1g"]
-script = ExtResource("1_k5js1")
+[sub_resource type="Resource" id="Resource_p7oya"]
+script = ExtResource("1_hsvup")
 Damage = 10
+Knockback = 0.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jbwuv"]
+direction = Vector3(1, 4, 1)
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, -10.655, 0)
+scale_over_velocity_min = 29.41
+scale_over_velocity_max = 29.41
 
 [sub_resource type="BoxMesh" id="BoxMesh_0513y"]
 size = Vector3(0.1, 0.1, 0.1)
@@ -16,4 +25,7 @@ size = Vector3(0.1, 0.1, 0.1)
 script = ExtResource("2_jkc34")
 ProjectileMesh = SubResource("SphereMesh_tg002")
 ParticleMesh = Array[Mesh]([SubResource("BoxMesh_0513y")])
-Impaction = SubResource("Resource_kvb1g")
+ParticleMaterial = SubResource("ParticleProcessMaterial_jbwuv")
+Impaction = SubResource("Resource_p7oya")
+TimeoutTimer = 10.0
+ParticleLifetime = 1.0

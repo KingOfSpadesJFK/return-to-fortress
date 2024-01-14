@@ -14,6 +14,6 @@ public partial class WeaponProjectile : Weapon
         instance.Info = _projectile;
         instance.Speed = Speed;
         node.AddChild(instance);
-        GD.Print("WeaponProjectile.Fire() completed at " + initPos);
+        ReturnToFortress.LogInfo("Fired at ", initPos);
     }
 }
