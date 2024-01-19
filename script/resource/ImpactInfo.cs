@@ -9,10 +9,10 @@ public partial class ImpactInfo : Resource
 	private Resource StatusEffect = null;
 	private Resource AreaOfEffect = null;
 
-	public virtual void Impact(GodotObject obj) {
+	public virtual void Impact(GodotObject obj, PlayerInfo info = null) {
 		ReturnToFortress.LogInfo("Impacted " + obj + "!");
 		if (obj is IDamagable damagable) {
-			damagable.Damage(Damage);
+			damagable.Damage(Damage, playerInfo: info);
 		}
 	}
 }

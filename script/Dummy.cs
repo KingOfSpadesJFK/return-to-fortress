@@ -19,7 +19,7 @@ public partial class Dummy : StaticBody3D, IDamagable
 	{
 	}
 
-	public void Damage(int damage, Vector3 knockback = new Vector3())
+	public void Damage(int damage, Vector3 knockback = new Vector3(), PlayerInfo playerInfo = null)
 	{
 		ReturnToFortress.LogInfo("Dummy took ", damage, " damage. Ow.");
 		Health -= damage;

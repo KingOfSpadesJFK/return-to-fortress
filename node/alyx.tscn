@@ -1,22 +1,22 @@
-[gd_scene load_steps=11 format=3 uid="uid://dr16mfpbis6gj"]
+[gd_scene load_steps=11 format=3 uid="uid://c63inopkpa13w"]
 
-[ext_resource type="Script" path="res://script/Player.cs" id="1_h1pj0"]
-[ext_resource type="Script" path="res://script/resource/PlayerClass.cs" id="2_16dls"]
-[ext_resource type="Resource" uid="uid://bydgh78aqte3a" path="res://resource/team/red.tres" id="3_jss2s"]
-[ext_resource type="Script" path="res://script/resource/PlayerInfo.cs" id="4_au4kj"]
-[ext_resource type="Resource" uid="uid://nq45ntrbb7hu" path="res://resource/weapon/projectile/rocket_launcher.tres" id="4_y5ksf"]
+[ext_resource type="Script" path="res://script/Player.cs" id="1_urcqv"]
+[ext_resource type="Script" path="res://script/resource/PlayerClass.cs" id="2_m7l6c"]
+[ext_resource type="Resource" uid="uid://nq45ntrbb7hu" path="res://resource/weapon/projectile/rocket_launcher.tres" id="3_hx0f4"]
+[ext_resource type="Resource" uid="uid://cutl71pbb3bki" path="res://resource/team/blue.tres" id="4_ipkwp"]
+[ext_resource type="Script" path="res://script/resource/PlayerInfo.cs" id="5_mfr2s"]
 
-[sub_resource type="Resource" id="Resource_gg1ig"]
-script = ExtResource("2_16dls")
-Name = "Scout"
-MaxHealth = 120
+[sub_resource type="Resource" id="Resource_4poei"]
+script = ExtResource("2_m7l6c")
+Name = "Soldier"
+MaxHealth = 175
 MaxArmor = 100
 
-[sub_resource type="Resource" id="Resource_dufmh"]
-script = ExtResource("4_au4kj")
-ID = "0"
-Name = "Gordon"
-Class = SubResource("Resource_gg1ig")
+[sub_resource type="Resource" id="Resource_lk2yi"]
+script = ExtResource("5_mfr2s")
+ID = "1"
+Name = "Alyx"
+Class = SubResource("Resource_4poei")
 Health = 100
 Armor = 0
 Kills = 0
@@ -24,8 +24,8 @@ Deaths = 0
 Assists = 0
 Score = 0
 Ping = 0
-Team = ExtResource("3_jss2s")
-Loadout = Array[Object]([ExtResource("4_y5ksf")])
+Team = ExtResource("4_ipkwp")
+Loadout = Array[Object]([ExtResource("3_hx0f4")])
 Position = Vector3(0, 0, 0)
 Rotation = Vector3(0, 0, 0)
 WishDirection = Vector3(0, 0, 0)
@@ -40,10 +40,11 @@ EyeRotation = Vector3(0, 0, 0)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_lwdoh"]
 
-[node name="Gordon" type="CharacterBody3D" node_paths=PackedStringArray("_firePoint")]
-script = ExtResource("1_h1pj0")
-Info = SubResource("Resource_dufmh")
+[node name="Alyx" type="CharacterBody3D" node_paths=PackedStringArray("_firePoint")]
+script = ExtResource("1_urcqv")
+Info = SubResource("Resource_lk2yi")
 _firePoint = NodePath("Head/Eye/FirePoint")
+_ignoreClientInput = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -52,7 +53,7 @@ shape = SubResource("CylinderShape3D_581ow")
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72976, 0)
 
-[node name="Eye" type="Camera3D" parent="Head"]
+[node name="Eye" type="Node3D" parent="Head"]
 
 [node name="FirePoint" type="Node3D" parent="Head/Eye"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.566, -0.285, -0.936)
@@ -63,5 +64,4 @@ mesh = SubResource("PrismMesh_kypmr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-visible = false
 mesh = SubResource("CylinderMesh_lwdoh")

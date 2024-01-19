@@ -3,5 +3,5 @@ using System;
 
 public interface IDamagable
 {
-    public void Damage(int damage, Vector3 knockback = new Vector3());
+    public void Damage(int damage, Vector3 knockback = new Vector3(), PlayerInfo playerInfo = null);
 }

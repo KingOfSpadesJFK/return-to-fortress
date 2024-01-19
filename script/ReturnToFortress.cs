@@ -9,13 +9,17 @@ using System.Text;
 //  debugging.
 public partial class ReturnToFortress : Node
 {
-	public static PackedScene PlayerScene { get; private set; }
+	public static PackedScene ClientPlayerScene { get; private set; }
+	public static PackedScene NetworkPlayerScene { get; private set; }
 	public static PackedScene ProjectileScene { get; private set; }
-	public static ClientSettings Settings { get; private set; }
+	public static ClientSettings Settings { get; private set; } = new ClientSettings();
+
+	public const float SENSITIVITY_CONSTANT = 0.0075f;
 
 	public override void _Ready()
 	{
-		PlayerScene = GD.Load<PackedScene>("res://node/gordon.tscn");
+		ClientPlayerScene = GD.Load<PackedScene>("res://node/gordon.tscn");
+		NetworkPlayerScene = GD.Load<PackedScene>("res://node/alyx.tscn");
 		ProjectileScene = GD.Load<PackedScene>("res://node/projectile.tscn");
 	}
 

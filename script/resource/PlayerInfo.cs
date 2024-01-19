@@ -15,10 +15,19 @@ public partial class PlayerInfo : Resource
 	[Export] public int Score = 0;
 	[Export] public int Ping = 0;
 	[Export] public Team Team;
-	[Export] public Weapon Weapon;
+	[Export] public Godot.Collections.Array<Weapon> Loadout;
 	[Export] public Vector3 Position;
 	[Export] public Vector3 Rotation;
+	[Export] public Vector3 WishDirection;
 	[Export] public Vector3 Velocity;
+	[Export] public Vector3 HeadPosition;
+	[Export] public Vector3 HeadRotation;
+	[Export] public Vector3 EyeRotation;
+
+	public PlayerState PlayerState;
+
+	public Weapon Weapon { get => Loadout[_currentWeaponIndex]; }
+	private int _currentWeaponIndex = 0;
 
 	public PlayerInfo() : this(null, null, new PlayerClass()) {}
 

@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://byxq3ghcmw4ba"]
+[gd_scene load_steps=14 format=3 uid="uid://byxq3ghcmw4ba"]
 
+[ext_resource type="PackedScene" uid="uid://c63inopkpa13w" path="res://node/alyx.tscn" id="1_7q5sm"]
 [ext_resource type="PackedScene" uid="uid://dr16mfpbis6gj" path="res://node/gordon.tscn" id="1_h75wl"]
 [ext_resource type="Script" path="res://script/Dummy.cs" id="2_siqmu"]
 [ext_resource type="Resource" uid="uid://nq45ntrbb7hu" path="res://resource/weapon/projectile/rocket_launcher.tres" id="3_hpwl6"]
@@ -32,8 +33,11 @@ albedo_color = Color(0.521569, 0.662745, 0.807843, 1)
 
 [node name="Actor" type="Node" parent="."]
 
+[node name="Alyx" parent="Actor" instance=ExtResource("1_7q5sm")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -14.118)
+
 [node name="Gordon" parent="Actor" instance=ExtResource("1_h75wl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10618, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10618, 11.3511)
 
 [node name="Dummy" type="StaticBody3D" parent="Actor"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -9.42384, 1.83397, -29.0716)
