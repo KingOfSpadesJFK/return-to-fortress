@@ -26,8 +26,8 @@ public partial class PlayerInfo : Resource
 
 	public PlayerState PlayerState;
 
-	public Weapon Weapon { get => Loadout[_currentWeaponIndex]; }
-	private int _currentWeaponIndex = 0;
+	public Weapon Weapon { get => Loadout[_weaponIndex]; }
+	private int _weaponIndex = 0;
 
 	public PlayerInfo() : this(null, null, new PlayerClass()) {}
 
@@ -37,5 +37,26 @@ public partial class PlayerInfo : Resource
 		Class = playerClass;
 		Health = playerClass.MaxHealth;
 		Armor = playerClass.MaxArmor;
+	}
+
+	public void NextWeapon() {
+		_weaponIndex = (_weaponIndex + 1) % Loadout.Count;
+	}
+
+	public void PreviousWeapon() {
+		_weaponIndex = (_weaponIndex - 1) % Loadout.Count;
+		if (_weaponIndex < 0) _weaponIndex = Loadout.Count - 1;
+	}
+
+	public void AddWeapon(Weapon weapon) {
+		Loadout.Add(weapon);
+	}
+
+	public void RemoveWeapon(Weapon weapon) {
+		Loadout.Remove(weapon);
+	}
+
+	public void SetWeapon(int index) {
+		_weaponIndex = index;
 	}
 }

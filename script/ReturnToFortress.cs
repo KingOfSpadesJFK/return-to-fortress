@@ -12,7 +12,11 @@ public partial class ReturnToFortress : Node
 	public static PackedScene ClientPlayerScene { get; private set; }
 	public static PackedScene NetworkPlayerScene { get; private set; }
 	public static PackedScene ProjectileScene { get; private set; }
-	public static ClientSettings Settings { get; private set; } = new ClientSettings();
+	public static ClientSettings ClientSettings { get; private set; } = new ClientSettings();
+	public static ServerSettings ServerSettings { get; private set; } = new ServerSettings();
+	public static ENetMultiplayerPeer ClientPeer { get; private set; }
+	public static ENetMultiplayerPeer ServerPeer { get; private set; }
+
 
 	public const float SENSITIVITY_CONSTANT = 0.0075f;
 

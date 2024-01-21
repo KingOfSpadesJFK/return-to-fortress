@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://dr16mfpbis6gj"]
+[gd_scene load_steps=12 format=3 uid="uid://dr16mfpbis6gj"]
 
 [ext_resource type="Script" path="res://script/Player.cs" id="1_h1pj0"]
 [ext_resource type="Script" path="res://script/resource/PlayerClass.cs" id="2_16dls"]
 [ext_resource type="Resource" uid="uid://bydgh78aqte3a" path="res://resource/team/red.tres" id="3_jss2s"]
 [ext_resource type="Script" path="res://script/resource/PlayerInfo.cs" id="4_au4kj"]
+[ext_resource type="Resource" uid="uid://b8t8g7b8j3xye" path="res://resource/weapon/hitscan/pistol.tres" id="4_op0ej"]
 [ext_resource type="Resource" uid="uid://nq45ntrbb7hu" path="res://resource/weapon/projectile/rocket_launcher.tres" id="4_y5ksf"]
 
 [sub_resource type="Resource" id="Resource_gg1ig"]
@@ -25,7 +26,7 @@ Assists = 0
 Score = 0
 Ping = 0
 Team = ExtResource("3_jss2s")
-Loadout = Array[Object]([ExtResource("4_y5ksf")])
+Loadout = Array[Object]([ExtResource("4_y5ksf"), ExtResource("4_op0ej")])
 Position = Vector3(0, 0, 0)
 Rotation = Vector3(0, 0, 0)
 WishDirection = Vector3(0, 0, 0)
@@ -55,13 +56,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72976, 0)
 [node name="Eye" type="Camera3D" parent="Head"]
 
 [node name="FirePoint" type="Node3D" parent="Head/Eye"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.566, -0.285, -0.936)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.220719, -0.285, -0.936)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Eye/FirePoint"]
 transform = Transform3D(0.453943, 0, 0, 0, -4.37113e-08, 0.0772695, 0, -0.999998, -3.37756e-09, 0, 0, 0)
 mesh = SubResource("PrismMesh_kypmr")
 
+[node name="RayCast3D" type="RayCast3D" parent="Head/Eye/FirePoint"]
+target_position = Vector3(0, 0, -100)
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-visible = false
 mesh = SubResource("CylinderMesh_lwdoh")

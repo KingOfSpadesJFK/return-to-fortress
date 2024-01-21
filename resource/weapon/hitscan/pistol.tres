@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="WeaponHitscan" load_steps=4 format=3 uid="uid://b8t8g7b8j3xye"]
+
+[ext_resource type="Script" path="res://script/resource/WeaponHitscan.cs" id="1_hathw"]
+[ext_resource type="Script" path="res://script/resource/ImpactInfo.cs" id="1_sme55"]
+
+[sub_resource type="Resource" id="Resource_6dysp"]
+script = ExtResource("1_sme55")
+Damage = 10
+Knockback = 0.0
+
+[resource]
+script = ExtResource("1_hathw")
+Range = 100.0
+Spread = 0.0
+Shrapnel = 1
+Impaction = SubResource("Resource_6dysp")
+Name = "Pistol"
+MaxAmmo = 100
+MaxClip = 10
+FireRate = 0.1
+FirePointOffset = Vector3(0, 0, 0)
+LoopReloadAnimation = false
+ReloadAmmoPerLoop = 1
+MuzzleflashMeshes = null

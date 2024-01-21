@@ -28,7 +28,7 @@ public partial class Player : CharacterBody3D, IDamagable
 	[Export] private int _maxJumps = 1;
 	[Export] private Node3D _firePoint;
 	[Export] private bool _ignoreClientInput = false;		// Set to true if this player is controlled over the network or by an AI.
-	public float Sensitivity = 0.750f;
+	public Weapon Weapon { get => Info.Weapon; }
 
 	[Signal] public delegate void PlayerJumpEventHandler();
 	[Signal] public delegate void PlayerFireEventHandler();
@@ -37,8 +37,8 @@ public partial class Player : CharacterBody3D, IDamagable
 	[Signal] public delegate void PlayerCrouchEventHandler(bool crouched);
 	[Signal] public delegate void PlayerDamageEventHandler();
 	[Signal] public delegate void PlayerDeathEventHandler();
-	private Projectile _projectileInstance;
 
+	private Projectile _projectileInstance;
 	private Node3D _head;
 	private Node3D _eye;
 
@@ -83,7 +83,7 @@ public partial class Player : CharacterBody3D, IDamagable
 	{
 		// Mouse movement
 		if (!_ignoreClientInput && @event is InputEventMouseMotion mouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured) {
-			Vector2 mouseVelocity = mouseMotion.Relative * ReturnToFortress.Settings.MouseSensitivity * ReturnToFortress.SENSITIVITY_CONSTANT;
+			Vector2 mouseVelocity = mouseMotion.Relative * ReturnToFortress.ClientSettings.MouseSensitivity * ReturnToFortress.SENSITIVITY_CONSTANT;
 			_head.RotateY(-mouseVelocity.X);
 			_eye.RotateX(-mouseVelocity.Y);
 			_eye.RotationDegrees = new Vector3(
@@ -110,7 +110,15 @@ public partial class Player : CharacterBody3D, IDamagable
 				HandleJump();
 				_jumps++;
 			}
-			
+
+			// Weapon swap
+			if (@event.IsActionPressed("player_weapon_prev")) {
+				Info.PreviousWeapon();
+			}
+
+			if (@event.IsActionPressed("player_weapon_next")) {
+				Info.NextWeapon();
+			}
 		}
 	}
 
@@ -124,8 +132,8 @@ public partial class Player : CharacterBody3D, IDamagable
 
 			// Fire
 			if (Input.IsActionJustPressed("player_fire") && Input.MouseMode == Input.MouseModeEnum.Captured) {
-				if (Info.Weapon is Weapon weapon) {
-					weapon.Fire(GetParent(), _firePoint.GlobalTransform.Basis, _firePoint.GlobalPosition, Info);
+				if (Weapon is not null) {
+					Weapon.Fire(this, _firePoint.GlobalTransform.Basis, _firePoint.GlobalPosition);
 					_isFiring = true;
 				}
 			}

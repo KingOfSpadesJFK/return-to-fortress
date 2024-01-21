@@ -4,6 +4,7 @@ using System;
 [GlobalClass]
 public partial class Weapon : Resource
 {
+    [Export] public string Name = "Weapon";
     [Export] public int MaxAmmo = 100;
     [Export] public int MaxClip = 10;
     [Export] public float FireRate = 0.1f;
@@ -26,5 +27,6 @@ public partial class Weapon : Resource
     private int _ammo = 10;
 
     public virtual void Fire() {}
-    public virtual void Fire(Node node, Basis initBasis, Vector3 initPos, PlayerInfo playerInfo = null) {}
+    public virtual void Fire(Node3D source, Basis initBasis, Vector3 initPos) {}
+    public override string ToString() { return Name; }
 }

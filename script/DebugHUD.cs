@@ -17,12 +17,15 @@ public partial class DebugHUD : RichTextLabel
 		this.Clear();
 		if (_player is not null) {
 			this.AddText("Health: " + _player.Info.Health + "\n");
-			this.AddText("Health: " + _player.Info.Armor + "\n");
+			this.AddText("Armor: " + _player.Info.Armor + "\n");
 			this.AddText("Ammo: " + _player.Info.Weapon.Ammo + "/" + _player.Info.Weapon.MaxAmmo + "\n");
 			this.AddText("Velocity: (" + string.Format("{0:0.00}", _player.Velocity.X) + ", " +
 					string.Format("{0:0.00}", _player.Velocity.Y) + ", " +
 					string.Format("{0:0.00}", _player.Velocity.Z) + ")\n");
 			this.AddText("Speed: " + string.Format("{0:0.00}", new Vector2(_player.Velocity.X, _player.Velocity.Z).Length()) + "\n");
+
+			this.AddText("Loadout: " + _player.Info.Loadout + "\n");
+			this.AddText("Weapon: " + _player.Info.Weapon + "\n");
 		}
 	}
 }

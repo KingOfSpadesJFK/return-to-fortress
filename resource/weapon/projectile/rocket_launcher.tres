@@ -7,6 +7,11 @@
 script = ExtResource("1_00gou")
 ProjectileToFire = ExtResource("1_1judg")
 Speed = 10.0
+Name = "Rocket Launcher"
 MaxAmmo = 12
 MaxClip = 3
 FireRate = 2.0
+FirePointOffset = Vector3(0, 0, 0)
+LoopReloadAnimation = false
+ReloadAmmoPerLoop = 1
+MuzzleflashMeshes = null

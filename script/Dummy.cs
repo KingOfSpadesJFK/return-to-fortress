@@ -30,7 +30,7 @@ public partial class Dummy : StaticBody3D, IDamagable
 	}
 	private void _on_timer_timeout()
 	{
-		Weapon.Fire(GetParent(), _firePoint.GlobalTransform.Basis, _firePoint.GlobalPosition);
+		Weapon.Fire(this, _firePoint.GlobalTransform.Basis, _firePoint.GlobalPosition);
 	}
 }
 
