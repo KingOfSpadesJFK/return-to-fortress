@@ -10,7 +10,7 @@ Knockback = 0.0
 
 [resource]
 script = ExtResource("1_hathw")
-Range = 100.0
+Range = 10.0
 Spread = 0.0
 Shrapnel = 1
 Impaction = SubResource("Resource_6dysp")
