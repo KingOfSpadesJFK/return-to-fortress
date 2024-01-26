@@ -62,9 +62,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.220719, -0.285, -0.936)
 transform = Transform3D(0.453943, 0, 0, 0, -4.37113e-08, 0.0772695, 0, -0.999998, -3.37756e-09, 0, 0, 0)
 mesh = SubResource("PrismMesh_kypmr")
 
-[node name="RayCast3D" type="RayCast3D" parent="Head/Eye/FirePoint"]
-target_position = Vector3(0, 0, -100)
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CylinderMesh_lwdoh")

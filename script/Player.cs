@@ -70,7 +70,7 @@ public partial class Player : CharacterBody3D, IDamagable
 		_eye = GetNode<Node3D>("Head/Eye");
 		_velocity = Velocity;
 
-		Input.MouseMode = Input.MouseModeEnum.Captured;
+		if (!_ignoreClientInput) Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
 	public void Damage(int damage, Vector3 knockback, PlayerInfo playerInfo = null) {
@@ -83,7 +83,7 @@ public partial class Player : CharacterBody3D, IDamagable
 	{
 		// Mouse movement
 		if (!_ignoreClientInput && @event is InputEventMouseMotion mouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured) {
-			Vector2 mouseVelocity = mouseMotion.Relative * ReturnToFortress.ClientSettings.MouseSensitivity * ReturnToFortress.SENSITIVITY_CONSTANT;
+			Vector2 mouseVelocity = mouseMotion.Relative * ReturnToFortress.Instance.ClientSettings.MouseSensitivity * ReturnToFortress.SENSITIVITY_CONSTANT;
 			_head.RotateY(-mouseVelocity.X);
 			_eye.RotateX(-mouseVelocity.Y);
 			_eye.RotationDegrees = new Vector3(

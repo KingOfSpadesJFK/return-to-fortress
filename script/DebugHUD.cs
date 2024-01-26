@@ -3,12 +3,12 @@ using System;
 
 public partial class DebugHUD : RichTextLabel
 {
+	public Player Player { get => _player; set => _player = value; }
 	private Player _player;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_player = GetNode<Player>("/root/Control/SubViewportContainer/SubViewport/Map/Actor/Gordon");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

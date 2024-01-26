@@ -12,7 +12,7 @@ public partial class WeaponProjectile : Weapon
 	private ProjectileInfo _projectile;
 
 	public override void Fire(Node3D source, Basis initBasis, Vector3 initPos) {
-		Projectile instance = ReturnToFortress.ProjectileScene.Instantiate<Projectile>();
+		Projectile instance = ReturnToFortress.Instance.ProjectileScene.Instantiate<Projectile>();
 		instance.GlobalTransform = new Transform3D(initBasis, initPos);
 		instance.Info = _projectile;
 		instance.Speed = Speed;
