@@ -13,9 +13,16 @@ public partial class UIControl : Control
 	{
 	}
 
+	private void HideButtons()
+	{
+		GetNode<Button>("Menu/HostButton")?.Hide();
+		GetNode<Button>("Menu/JoinButton")?.Hide();
+	}
+
 	private void _on_host_button_pressed()
 	{
 		ReturnToFortress.LogInfo("Hosting server...");
 		ReturnToFortress.Instance.GotoMap("res://map/2fort.tscn");
+		HideButtons();
 	}
 }

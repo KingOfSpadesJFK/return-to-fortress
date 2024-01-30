@@ -20,6 +20,7 @@ public partial class ReturnToFortress : Node
 	public ENetMultiplayerPeer ServerPeer { get; private set; }
 	public Node CurrentMap { get; private set; }
 	public Node MapRoot { get; set; }
+	public Random Random { get; private set; } = new Random();
 
 	public const float SENSITIVITY_CONSTANT = 0.0075f;
 
@@ -28,7 +29,7 @@ public partial class ReturnToFortress : Node
 		ClientPlayerScene = GD.Load<PackedScene>("res://node/gordon.tscn");
 		NetworkPlayerScene = GD.Load<PackedScene>("res://node/alyx.tscn");
 		ProjectileScene = GD.Load<PackedScene>("res://node/projectile.tscn");
-		MapRoot = GetTree().Root.GetNode("Control/SubViewportContainer/MapRoot");
+		MapRoot = GetNode("/root/Control/SubViewportContainer/MapRoot");
 		if (Instance is null) {
 			Instance = this;
 		} else {
@@ -53,8 +54,11 @@ public partial class ReturnToFortress : Node
 		var newMap = GD.Load<PackedScene>(mapPath);
 		CurrentMap = newMap.Instantiate();
 		MapRoot.AddChild(CurrentMap);
-		// Optionally, to make it compatible with the SceneTree.change_scene_to_file() API.
-		GetTree().CurrentScene = CurrentMap;
+
+		// Spawn players
+		var clientPlayer = ClientPlayerScene.Instantiate<Player>();
+		CurrentMap.GetNode("Actor").AddChild(clientPlayer);
+		CurrentMap.GetNode<SpawnBox>("Area/RedSpawn").SpawnPlayer(clientPlayer);
 	}
 
 	public static void LogInfo(params object[] what)
