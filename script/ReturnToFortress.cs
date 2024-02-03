@@ -57,13 +57,18 @@ public partial class ReturnToFortress : Node
 		Multiplayer.MultiplayerPeer = ServerPeer;
 		UniquePeerID = Multiplayer.GetUniqueId();
 		GotoMap("res://map/2fort.tscn");
-		
 		AddPlayer("Host", UniquePeerID);
+
+		// Called once a peer is connected to the host
 		ServerPeer.PeerConnected += async (id) => {
 			await ToSignal(GetTree().CreateTimer(1.0), Timer.SignalName.Timeout);
-			Rpc("AddConnectingPlayer", id);
+			Rpc("AddConnectingPlayer", (int)id);
 			RpcId(id, "AddPreviouslyConnectedCharacters", Players.Keys.ToArray());
 			InstantiatePlayer(AddPlayer("Peer", (int)id));
+			LogInfo("Peer connected with ID ", id);
+			foreach (var i in Players.Keys) {
+				LogInfo(i);
+			}
 		};
 	}
 
@@ -89,8 +94,6 @@ public partial class ReturnToFortress : Node
 		Multiplayer.MultiplayerPeer = ClientPeer;
 		UniquePeerID = Multiplayer.GetUniqueId();
 		GotoMap("res://map/2fort.tscn");
-
-		AddPlayer("Peer", UniquePeerID);
 	}
 
 	[Rpc]
@@ -106,7 +109,6 @@ public partial class ReturnToFortress : Node
 		foreach (var info in infos) {
 			// LogInfo("Adding ", info.Name, " with ID ", info.ID, " to Players list.");
 			var pInfo = AddPlayer(info == 1 ? "Host" : "Peer", info);
-			Players.Add(info, pInfo);
 			InstantiatePlayer(pInfo);
 		}
 	}

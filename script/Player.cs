@@ -71,6 +71,7 @@ public partial class Player : CharacterBody3D, IDamagable
 		_velocity = Velocity;
 
 		if (IsMultiplayerAuthority()) Input.MouseMode = Input.MouseModeEnum.Captured;
+		Name = Info.Name + "#" + Info.ID;
 	}
 
 	public void Damage(int damage, Vector3 knockback, PlayerInfo playerInfo = null) {
@@ -138,7 +139,14 @@ public partial class Player : CharacterBody3D, IDamagable
 				}
 			}
 		}
-		
+	}
+
+	[Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.Unreliable)]
+	private void RemoteSetPosition(Vector3 position, Vector3 rotation, Vector3 headRotation, Vector3 eyeRotation) {
+		Position = position;
+		Rotation = rotation;
+		_head.Rotation = headRotation;
+		_eye.Rotation = eyeRotation;
 	}
 
 	// Handle physics processing
@@ -166,6 +174,8 @@ public partial class Player : CharacterBody3D, IDamagable
 		_isJumping = false;
 		_isFiring = false;
 		_isCrouching = false;
+
+		Rpc("RemoteSetPosition", GlobalPosition, GlobalRotation, _head.Rotation, _eye.Rotation);
 	}
 
 	private void StorePlayerInfo() {
