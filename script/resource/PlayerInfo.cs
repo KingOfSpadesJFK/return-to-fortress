@@ -4,7 +4,7 @@ using System;
 [GlobalClass]
 public partial class PlayerInfo : Resource
 {
-	[Export] public string ID = "0";
+	[Export] public int ID = 0;
 	[Export] public string Name = "Player";
 	[Export] public PlayerClass Class;
 	[Export] public int Health = 100;
@@ -29,9 +29,9 @@ public partial class PlayerInfo : Resource
 	public Weapon Weapon { get => Loadout[_weaponIndex]; }
 	private int _weaponIndex = 0;
 
-	public PlayerInfo() : this(null, null, new PlayerClass()) {}
+	public PlayerInfo() : this(0, null, new PlayerClass()) {}
 
-	public PlayerInfo(string id, string name, PlayerClass playerClass) {
+	public PlayerInfo(int id, string name, PlayerClass playerClass) {
 		ID = id;
 		Name = name;
 		Class = playerClass;

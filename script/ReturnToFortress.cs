@@ -1,6 +1,9 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 // This class functions as a singleton, and is used to store packed scenes, client settings,
@@ -21,8 +24,12 @@ public partial class ReturnToFortress : Node
 	public Node CurrentMap { get; private set; }
 	public Node MapRoot { get; set; }
 	public Random Random { get; private set; } = new Random();
+	public Dictionary<int, PlayerInfo> Players { get; private set; } = new Dictionary<int, PlayerInfo>();
 
 	public const float SENSITIVITY_CONSTANT = 0.0075f;
+	private const int PORT = 8200;
+	private const string IP = "127.0.0.1";		// localhost
+	public int UniquePeerID { get; private set; }
 
 	public override void _Ready()
 	{
@@ -43,6 +50,76 @@ public partial class ReturnToFortress : Node
 	{
 	}
 
+	public void HostServer() 
+	{
+		ServerPeer = new ENetMultiplayerPeer();
+		ServerPeer.CreateServer(PORT, 32);
+		Multiplayer.MultiplayerPeer = ServerPeer;
+		UniquePeerID = Multiplayer.GetUniqueId();
+		GotoMap("res://map/2fort.tscn");
+		
+		AddPlayer("Host", UniquePeerID);
+		ServerPeer.PeerConnected += async (id) => {
+			await ToSignal(GetTree().CreateTimer(1.0), Timer.SignalName.Timeout);
+			Rpc("AddConnectingPlayer", id);
+			RpcId(id, "AddPreviouslyConnectedCharacters", Players.Keys.ToArray());
+			InstantiatePlayer(AddPlayer("Peer", (int)id));
+		};
+	}
+
+	private void InstantiatePlayer(PlayerInfo infos)
+	{
+		var player = infos.ID == UniquePeerID ? ClientPlayerScene.Instantiate<Player>() : NetworkPlayerScene.Instantiate<Player>();
+		player.Info = infos;
+		player.SetMultiplayerAuthority(player.Info.ID);
+		CurrentMap.GetNode("Actor").AddChild(player);
+	}
+
+	private void InstantiatePlayers()
+	{
+		foreach (var info in Players.Values) {
+			InstantiatePlayer(info);
+		}
+	}
+
+	public void JoinServer() 
+	{
+		ClientPeer = new ENetMultiplayerPeer();
+		ClientPeer.CreateClient(IP, PORT);
+		Multiplayer.MultiplayerPeer = ClientPeer;
+		UniquePeerID = Multiplayer.GetUniqueId();
+		GotoMap("res://map/2fort.tscn");
+
+		AddPlayer("Peer", UniquePeerID);
+	}
+
+	[Rpc]
+	private void AddConnectingPlayer(int id) 
+	{
+		InstantiatePlayer(AddPlayer("Peer", id));
+	}
+
+	[Rpc]
+	private void AddPreviouslyConnectedCharacters(int[] infos)
+	{
+		LogInfo("Adding previously connected characters");
+		foreach (var info in infos) {
+			// LogInfo("Adding ", info.Name, " with ID ", info.ID, " to Players list.");
+			var pInfo = AddPlayer(info == 1 ? "Host" : "Peer", info);
+			Players.Add(info, pInfo);
+			InstantiatePlayer(pInfo);
+		}
+	}
+
+	public PlayerInfo AddPlayer(string name, int id)
+	{
+		PlayerInfo player = new PlayerInfo(id, name, new PlayerClass());
+		player.Name = name;
+		player.ID = id;
+		Players.Add(id, player);
+		return player;
+	}
+
 	public void GotoMap(string mapPath)
 	{
 		CallDeferred(nameof(DeferredGotoMap), mapPath);
@@ -54,18 +131,14 @@ public partial class ReturnToFortress : Node
 		var newMap = GD.Load<PackedScene>(mapPath);
 		CurrentMap = newMap.Instantiate();
 		MapRoot.AddChild(CurrentMap);
-
-		// Spawn players
-		var clientPlayer = ClientPlayerScene.Instantiate<Player>();
-		CurrentMap.GetNode("Actor").AddChild(clientPlayer);
-		CurrentMap.GetNode<SpawnBox>("Area/RedSpawn").SpawnPlayer(clientPlayer);
+		InstantiatePlayers();
 	}
 
 	public static void LogInfo(params object[] what)
 	{
 		var methodInfo = new StackTrace().GetFrame(1).GetMethod();
 		var className = methodInfo.ReflectedType.Name;
-		GD.Print("[INFO] ", className, ": ", BuildParamStrings(what));
+		GD.Print("[INFO](" + Instance.UniquePeerID + ") ", className, ": ", BuildParamStrings(what));
 	}
 
 	private static string BuildParamStrings(params object[] what) 
@@ -85,6 +158,6 @@ public partial class ReturnToFortress : Node
 	{
 		var methodInfo = new StackTrace().GetFrame(1).GetMethod();
 		var className = methodInfo.ReflectedType.Name;
-		GD.PrintErr("[ERROR] ", className, ": ", BuildParamStrings(what));
+		GD.PrintErr("[ERROR](" + Instance.UniquePeerID + ") ", className, ": ", BuildParamStrings(what));
 	}
 }

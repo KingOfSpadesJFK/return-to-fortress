@@ -16,7 +16,7 @@ public enum PlayerState {
 [GlobalClass]
 public partial class Player : CharacterBody3D, IDamagable
 {
-	[Export] public PlayerInfo Info { get; private set; }
+	[Export] public PlayerInfo Info { get; set; }
 	[Export] private float _walkingAcceleration = 35.0f;
 	[Export] private float _walkingSpeedCap = 5.0f;
 	[Export] private float _walkingDeceleration = 7.0f;
@@ -70,7 +70,7 @@ public partial class Player : CharacterBody3D, IDamagable
 		_eye = GetNode<Node3D>("Head/Eye");
 		_velocity = Velocity;
 
-		if (!_ignoreClientInput) Input.MouseMode = Input.MouseModeEnum.Captured;
+		if (IsMultiplayerAuthority()) Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
 	public void Damage(int damage, Vector3 knockback, PlayerInfo playerInfo = null) {
@@ -82,7 +82,7 @@ public partial class Player : CharacterBody3D, IDamagable
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		// Mouse movement
-		if (!_ignoreClientInput && @event is InputEventMouseMotion mouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured) {
+		if (IsMultiplayerAuthority() && @event is InputEventMouseMotion mouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured) {
 			Vector2 mouseVelocity = mouseMotion.Relative * ReturnToFortress.Instance.ClientSettings.MouseSensitivity * ReturnToFortress.SENSITIVITY_CONSTANT;
 			_head.RotateY(-mouseVelocity.X);
 			_eye.RotateX(-mouseVelocity.Y);
@@ -97,7 +97,7 @@ public partial class Player : CharacterBody3D, IDamagable
 	// Handle single press actions
 	public override void _Input(InputEvent @event)
 	{
-		if (!_ignoreClientInput) {
+		if (IsMultiplayerAuthority()) {
 			// Add a force to the player in the direction they are looking
 			//  This is for debugging purposes only
 			if (@event.IsActionPressed("debug_playerimpulse")) {
@@ -125,7 +125,7 @@ public partial class Player : CharacterBody3D, IDamagable
 	// Handle polling actions
 	public override void _Process(double delta)
 	{
-		if (!_ignoreClientInput) {
+		if (IsMultiplayerAuthority()) {
 			// Get the wish direction from the input
 			Vector2 inputDir = Input.GetVector("player_movement_left", "player_movement_right", "player_movement_up", "player_movement_down");
 			_wishDir = (_head.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();

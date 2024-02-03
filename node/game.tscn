@@ -85,3 +85,4 @@ text = "Join
 "
 
 [connection signal="pressed" from="Menu/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="Menu/JoinButton" to="." method="_on_join_button_pressed"]

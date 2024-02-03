@@ -15,6 +15,7 @@ public partial class DebugHUD : RichTextLabel
 	public override void _Process(double delta)
 	{
 		this.Clear();
+		this.AddText("UniquePeerID: " + ReturnToFortress.Instance.UniquePeerID + "\n");
 		if (_player is not null) {
 			this.AddText("Health: " + _player.Info.Health + "\n");
 			this.AddText("Armor: " + _player.Info.Armor + "\n");

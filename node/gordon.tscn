@@ -15,7 +15,7 @@ MaxArmor = 100
 
 [sub_resource type="Resource" id="Resource_dufmh"]
 script = ExtResource("4_au4kj")
-ID = "0"
+ID = 0
 Name = "Gordon"
 Class = SubResource("Resource_gg1ig")
 Health = 100
