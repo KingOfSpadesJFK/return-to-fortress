@@ -133,20 +133,18 @@ public partial class Player : CharacterBody3D, IDamagable
 
 			// Fire
 			if (Input.IsActionJustPressed("player_fire") && Input.MouseMode == Input.MouseModeEnum.Captured) {
-				if (Weapon is not null) {
-					Weapon.Fire(this, _firePoint.GlobalTransform.Basis, _firePoint.GlobalPosition);
-					_isFiring = true;
-				}
+				FireWeapon();
+				Rpc("RemoteFireWeapon");
 			}
 		}
 	}
 
-	[Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.Unreliable)]
-	private void RemoteSetPosition(Vector3 position, Vector3 rotation, Vector3 headRotation, Vector3 eyeRotation) {
-		Position = position;
-		Rotation = rotation;
-		_head.Rotation = headRotation;
-		_eye.Rotation = eyeRotation;
+	private void FireWeapon()
+	{
+		if (Weapon is not null) {
+			Weapon.Fire(this, _firePoint.GlobalTransform.Basis, _firePoint.GlobalPosition);
+			_isFiring = true;
+		}
 	}
 
 	// Handle physics processing
@@ -176,6 +174,7 @@ public partial class Player : CharacterBody3D, IDamagable
 		_isCrouching = false;
 
 		Rpc("RemoteSetPosition", GlobalPosition, GlobalRotation, _head.Rotation, _eye.Rotation);
+		Rpc("RemoteSetWeapon", Info.WeaponIndex);
 	}
 
 	private void StorePlayerInfo() {
@@ -226,5 +225,25 @@ public partial class Player : CharacterBody3D, IDamagable
 			float acceleration = IsOnFloor() ? _walkingAcceleration : _walkingAirAcceleration * jumpDirDot;
 			_velocityXZ += _wishDirXZ * acceleration * (float)delta;
 		}
+	}
+
+	//------------------ REMOTE CALLS ------------------//
+
+	[Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.Unreliable)]
+	private void RemoteFireWeapon() {
+		FireWeapon();
+	}
+
+	[Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.Unreliable)]
+	private void RemoteSetWeapon(int i) {
+		Info.SetWeapon(i);
+	}
+
+	[Rpc(TransferMode = MultiplayerPeer.TransferModeEnum.Unreliable)]
+	private void RemoteSetPosition(Vector3 position, Vector3 rotation, Vector3 headRotation, Vector3 eyeRotation) {
+		Position = position;
+		Rotation = rotation;
+		_head.Rotation = headRotation;
+		_eye.Rotation = eyeRotation;
 	}
 }

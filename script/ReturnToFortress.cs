@@ -25,6 +25,7 @@ public partial class ReturnToFortress : Node
 	public Node MapRoot { get; set; }
 	public Random Random { get; private set; } = new Random();
 	public Dictionary<int, PlayerInfo> Players { get; private set; } = new Dictionary<int, PlayerInfo>();
+	public Player LocalPlayer { get; private set; }
 
 	public const float SENSITIVITY_CONSTANT = 0.0075f;
 	private const int PORT = 8200;
@@ -66,9 +67,6 @@ public partial class ReturnToFortress : Node
 			RpcId(id, "AddPreviouslyConnectedCharacters", Players.Keys.ToArray());
 			InstantiatePlayer(AddPlayer("Peer", (int)id));
 			LogInfo("Peer connected with ID ", id);
-			foreach (var i in Players.Keys) {
-				LogInfo(i);
-			}
 		};
 	}
 
@@ -76,8 +74,13 @@ public partial class ReturnToFortress : Node
 	{
 		var player = infos.ID == UniquePeerID ? ClientPlayerScene.Instantiate<Player>() : NetworkPlayerScene.Instantiate<Player>();
 		player.Info = infos;
+		player.Info.AddWeapon(GD.Load<Weapon>("res://resource/weapon/projectile/rocket_launcher.tres"));
+		player.Info.AddWeapon(GD.Load<Weapon>("res://resource/weapon/hitscan/pistol.tres"));
 		player.SetMultiplayerAuthority(player.Info.ID);
 		CurrentMap.GetNode("Actor").AddChild(player);
+		if (infos.ID == UniquePeerID) {
+			LocalPlayer = player;
+		}
 	}
 
 	private void InstantiatePlayers()

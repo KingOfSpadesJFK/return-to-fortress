@@ -18,22 +18,8 @@ script = ExtResource("4_au4kj")
 ID = 0
 Name = "Gordon"
 Class = SubResource("Resource_gg1ig")
-Health = 100
-Armor = 0
-Kills = 0
-Deaths = 0
-Assists = 0
-Score = 0
-Ping = 0
 Team = ExtResource("3_jss2s")
 Loadout = Array[Object]([ExtResource("4_y5ksf"), ExtResource("4_op0ej")])
-Position = Vector3(0, 0, 0)
-Rotation = Vector3(0, 0, 0)
-WishDirection = Vector3(0, 0, 0)
-Velocity = Vector3(0, 0, 0)
-HeadPosition = Vector3(0, 0, 0)
-HeadRotation = Vector3(0, 0, 0)
-EyeRotation = Vector3(0, 0, 0)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_581ow"]
 
