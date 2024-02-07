@@ -14,3 +14,6 @@ data_*/
 
 # Project-specific ignores
 .ignore/
+
+# IDE ignores
+.vscode/
