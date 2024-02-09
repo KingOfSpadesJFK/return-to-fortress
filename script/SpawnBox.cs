@@ -10,7 +10,7 @@ public partial class SpawnBox : Area3D
 		
 	}
 
-	public void SpawnPlayer(Player player)
+	public void BringToSpawn(Player player)
 	{
 		player.Rotation = GlobalRotation;
 		if (GetChild<CollisionShape3D>(0).Shape is BoxShape3D box) {
@@ -19,8 +19,6 @@ public partial class SpawnBox : Area3D
 			player.GlobalPosition = GlobalPosition + offset;
 			player.GlobalRotation = GlobalRotation;
 		}
-
-		GetNode("/root/Control/SubViewportContainer/MapRoot").AddChild(player);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

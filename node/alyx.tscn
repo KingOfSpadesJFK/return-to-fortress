@@ -18,7 +18,7 @@ ID = 0
 Name = "Alyx"
 Class = SubResource("Resource_4poei")
 Team = ExtResource("4_ipkwp")
-Loadout = Array[Object]([ExtResource("3_hx0f4")])
+Loadout = [ExtResource("3_hx0f4")]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_581ow"]
 

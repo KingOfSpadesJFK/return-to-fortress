@@ -14,7 +14,7 @@ public partial class Projectile : Node3D
 	private Timer _particleTimer;
 	private bool _usesParticles = false;
 	private bool _isDead = false;
-    public PlayerInfo PlayerInfo;
+	public PlayerInfo PlayerInfo;
 	
 	public override void _Ready()
 	{

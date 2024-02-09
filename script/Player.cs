@@ -71,7 +71,6 @@ public partial class Player : CharacterBody3D, IDamagable
 		_velocity = Velocity;
 
 		if (IsMultiplayerAuthority()) Input.MouseMode = Input.MouseModeEnum.Captured;
-		Name = Info.Name + "#" + Info.ID;
 	}
 
 	public void Damage(int damage, Vector3 knockback, PlayerInfo playerInfo = null) {
@@ -173,8 +172,10 @@ public partial class Player : CharacterBody3D, IDamagable
 		_isFiring = false;
 		_isCrouching = false;
 
-		Rpc("RemoteSetPosition", GlobalPosition, GlobalRotation, _head.Rotation, _eye.Rotation);
-		Rpc("RemoteSetWeapon", Info.WeaponIndex);
+		if (IsMultiplayerAuthority()) {
+			Rpc("RemoteSetPosition", GlobalPosition, GlobalRotation, _head.Rotation, _eye.Rotation);
+			Rpc("RemoteSetWeapon", Info.WeaponIndex);
+		}
 	}
 
 	private void StorePlayerInfo() {

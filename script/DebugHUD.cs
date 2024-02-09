@@ -14,6 +14,11 @@ public partial class DebugHUD : RichTextLabel
 	{
 		this.Clear();
 		this.AddText("UniquePeerID: " + ReturnToFortress.Instance.UniquePeerID + "\n");
+		this.AddText("Players: \n");
+		foreach (var p in ReturnToFortress.Instance.Players.Values) {
+			this.AddText("    " + p.Name + "#" + p.ID + "\n");
+		}
+		this.AddText("\n");
 		var player = ReturnToFortress.Instance.LocalPlayer;
 		if (player is not null) {
 			this.AddText("Health: " + player.Info.Health + "\n");

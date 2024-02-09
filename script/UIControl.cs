@@ -22,13 +22,11 @@ public partial class UIControl : Control
 	private void _on_host_button_pressed()
 	{
 		ReturnToFortress.LogInfo("Hosting server...");
-		ReturnToFortress.Instance.HostServer();
-		HideButtons();
+		if (ReturnToFortress.Instance.HostServer() == Error.Ok) HideButtons();
 	}
 	private void _on_join_button_pressed()
 	{	
 		ReturnToFortress.LogInfo("Joining server...");
-		ReturnToFortress.Instance.JoinServer();
-		HideButtons();
+		if (ReturnToFortress.Instance.JoinServer() == Error.Ok) HideButtons();
 	}
 }

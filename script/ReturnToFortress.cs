@@ -19,25 +19,27 @@ public partial class ReturnToFortress : Node
 	public PackedScene ProjectileScene { get; private set; }
 	public ClientSettings ClientSettings { get; private set; } = new ClientSettings();
 	public ServerSettings ServerSettings { get; private set; } = new ServerSettings();
-	public ENetMultiplayerPeer ClientPeer { get; private set; }
-	public ENetMultiplayerPeer ServerPeer { get; private set; }
-	public Node CurrentMap { get; private set; }
-	public Node MapRoot { get; set; }
+	public ENetMultiplayerPeer MultiplayerPeer { get; private set; }
+	public int UniquePeerID { get; private set; }
+	public Node MapRoot { get; private set; }
+	public NodePath MapRootPath { get; private set; }
+	public Node AreaRoot { get => MapRoot?.GetNode("Area"); }
+	public NodePath AreaRootPath { get => MapRootPath.IsEmpty ? MapRootPath + "/Area" : ""; }
+	public Node ActorRoot { get => MapRoot?.GetNode("Actor"); }
+	public NodePath ActorRootPath { get => MapRootPath.IsEmpty ? MapRootPath + "/Actor" : ""; }
+	public Node WorldRoot { get => MapRoot?.GetNode("World"); }
+	public NodePath WorldRootPath { get => MapRootPath.IsEmpty ? MapRootPath + "/World" : ""; }
 	public Random Random { get; private set; } = new Random();
 	public Dictionary<int, PlayerInfo> Players { get; private set; } = new Dictionary<int, PlayerInfo>();
 	public Player LocalPlayer { get; private set; }
 
 	public const float SENSITIVITY_CONSTANT = 0.0075f;
-	private const int PORT = 8200;
-	private const string IP = "127.0.0.1";		// localhost
-	public int UniquePeerID { get; private set; }
 
 	public override void _Ready()
 	{
 		ClientPlayerScene = GD.Load<PackedScene>("res://node/gordon.tscn");
 		NetworkPlayerScene = GD.Load<PackedScene>("res://node/alyx.tscn");
 		ProjectileScene = GD.Load<PackedScene>("res://node/projectile.tscn");
-		MapRoot = GetNode("/root/Control/SubViewportContainer/MapRoot");
 		if (Instance is null) {
 			Instance = this;
 		} else {
@@ -51,52 +53,60 @@ public partial class ReturnToFortress : Node
 	{
 	}
 
-	public void HostServer() 
+	public Error HostServer() 
 	{
-		ServerPeer = new ENetMultiplayerPeer();
-		ServerPeer.CreateServer(PORT, 32);
-		Multiplayer.MultiplayerPeer = ServerPeer;
+		MultiplayerPeer = new ENetMultiplayerPeer();
+		if (MultiplayerPeer.CreateServer(ServerSettings.Port, 32) != Error.Ok) {
+			LogError("Failed to create server.");
+			return Error.Failed;
+		}
+		Multiplayer.MultiplayerPeer = MultiplayerPeer;
 		UniquePeerID = Multiplayer.GetUniqueId();
 		GotoMap("res://map/2fort.tscn");
 		AddPlayer("Host", UniquePeerID);
 
 		// Called once a peer is connected to the host
-		ServerPeer.PeerConnected += async (id) => {
-			await ToSignal(GetTree().CreateTimer(1.0), Timer.SignalName.Timeout);
-			Rpc("AddConnectingPlayer", (int)id);
-			RpcId(id, "AddPreviouslyConnectedCharacters", Players.Keys.ToArray());
-			InstantiatePlayer(AddPlayer("Peer", (int)id));
-			LogInfo("Peer connected with ID ", id);
+		MultiplayerPeer.PeerConnected += async (id) => {
+			await ToSignal(GetTree().CreateTimer(0.1), Timer.SignalName.Timeout);
+			if (	Rpc("AddConnectingPlayer", (int)id) != Error.Ok || 
+					RpcId(id, "AddPreviouslyConnectedCharacters", Players.Keys.ToArray()) != Error.Ok) {
+				LogError("Failed to send RPCs to peer ", id);
+			} else {
+				InstantiatePlayer(AddPlayer("Peer", (int)id));
+				LogInfo("Peer connected with ID ", id);
+			}
 		};
+
+		MultiplayerPeer.PeerDisconnected += (id) => {
+			LogInfo("Peer disconnected with ID ", id);
+			Players.Remove((int)id);
+		};
+		return Error.Ok;
 	}
 
-	private void InstantiatePlayer(PlayerInfo infos)
+	public Error JoinServer() 
 	{
-		var player = infos.ID == UniquePeerID ? ClientPlayerScene.Instantiate<Player>() : NetworkPlayerScene.Instantiate<Player>();
-		player.Info = infos;
-		player.Info.AddWeapon(GD.Load<Weapon>("res://resource/weapon/projectile/rocket_launcher.tres"));
-		player.Info.AddWeapon(GD.Load<Weapon>("res://resource/weapon/hitscan/pistol.tres"));
-		player.SetMultiplayerAuthority(player.Info.ID);
-		CurrentMap.GetNode("Actor").AddChild(player);
-		if (infos.ID == UniquePeerID) {
-			LocalPlayer = player;
+		MultiplayerPeer = new ENetMultiplayerPeer();
+		if (MultiplayerPeer.CreateClient(ServerSettings.IP, ServerSettings.Port) != Error.Ok) {
+			LogError("Failed to connect to server.");
+			return Error.Failed;
 		}
-	}
-
-	private void InstantiatePlayers()
-	{
-		foreach (var info in Players.Values) {
-			InstantiatePlayer(info);
-		}
-	}
-
-	public void JoinServer() 
-	{
-		ClientPeer = new ENetMultiplayerPeer();
-		ClientPeer.CreateClient(IP, PORT);
-		Multiplayer.MultiplayerPeer = ClientPeer;
+		Multiplayer.MultiplayerPeer = MultiplayerPeer;
 		UniquePeerID = Multiplayer.GetUniqueId();
 		GotoMap("res://map/2fort.tscn");
+
+		MultiplayerPeer.PeerDisconnected += (id) => {
+			if (id == 1) {
+				LogError("Disconnected from server.");
+				LocalPlayer?.Free(); LocalPlayer = null;
+				MapRoot?.Free(); MapRoot = null;
+				Players.Clear();
+			} else {
+				LogInfo("Peer disconnected with ID ", id);
+				Players.Remove((int)id);
+			}
+		};
+		return Error.Ok;
 	}
 
 	[Rpc]
@@ -125,6 +135,35 @@ public partial class ReturnToFortress : Node
 		return player;
 	}
 
+	private void InstantiatePlayer(PlayerInfo infos)
+	{
+		var player = infos.ID == UniquePeerID ? ClientPlayerScene.Instantiate<Player>() : NetworkPlayerScene.Instantiate<Player>();
+		player.Info = infos;
+		player.Info.AddWeapon(GD.Load<Weapon>("res://resource/weapon/projectile/rocket_launcher.tres"));
+		player.Info.AddWeapon(GD.Load<Weapon>("res://resource/weapon/hitscan/pistol.tres"));
+		player.SetMultiplayerAuthority(player.Info.ID);
+		player.Name = infos.Name + "#" + infos.ID;
+		ActorRoot.AddChild(player);
+		if (infos.ID == UniquePeerID) {
+			LocalPlayer = player;
+		}
+
+		// TODO: Make it so players spawn in their team's spawn box
+		foreach (var spawn in AreaRoot.GetChildren()) {
+			if (spawn is SpawnBox spawnBox) {
+				spawnBox.BringToSpawn(player);
+				break;
+			}
+		}
+	}
+
+	private void InstantiatePlayers()
+	{
+		foreach (var info in Players.Values) {
+			InstantiatePlayer(info);
+		}
+	}
+
 	public void GotoMap(string mapPath)
 	{
 		CallDeferred(nameof(DeferredGotoMap), mapPath);
@@ -132,10 +171,11 @@ public partial class ReturnToFortress : Node
 
 	private void DeferredGotoMap(string mapPath)
 	{
-		CurrentMap?.Free();
+		MapRoot?.Free();
 		var newMap = GD.Load<PackedScene>(mapPath);
-		CurrentMap = newMap.Instantiate();
-		MapRoot.AddChild(CurrentMap);
+		MapRoot = newMap.Instantiate();
+		GetNode("/root/Control/SubViewportContainer/SubViewport").AddChild(MapRoot);
+		MapRootPath = MapRoot.GetPath();
 		InstantiatePlayers();
 	}
 
